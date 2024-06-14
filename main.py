@@ -58,6 +58,3 @@ while True:
         print(f"{game_name}#{tag_line} is in a live game!")
                  
     time.sleep(60)  
-    
-
-    
