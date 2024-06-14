@@ -1,8 +1,14 @@
 {
     "players": [
-        {"name": "Bal", "tag": "Chant"},
-        {"name": "Klokje", "tag": "Chant"},
-        {"name": "BeeGirl", "tag": "Graft"},
-        {"name": "The Death Artist", "tag": "Hwei1"}
+        {"name": "Bal", "tag": "Chant", "score": 0},
+        {"name": "Klokje", "tag": "Chant", "score": 0},
+        {"name": "BeeGirl", "tag": "Graft", "score": 0},
+        {"name": "hawk2eyes", "tag": "EUW", "score": 0},    
+        {"name": "Jeltano", "tag": "CHANT", "score": 0},
+        {"name": "BeeGuy", "tag": "Graft", "score": 0},
+        {"name": "Tomclo", "tag": "EUW", "score": 0},
+        {"name": "Chiemayusi", "tag": "Chant", "score": 0},
+        {"name": "TheRealLukeTS117", "tag": "EUW", "score": 0}
     ]
 }
+
