@@ -1,9 +1,28 @@
 {
     "players": [
-        {"name": "Lor On Support", "tag": "rekt", "score": 0},
-        {"name": "tomsen4", "tag": "EUW", "score": 0},
-        {"name": "sanderverho", "tag": "EUW", "score": 0},
-        {"name": "Wesiust", "tag": "EUW", "score": 0}
+        {
+            "name": "Streaming Badboy",
+            "tag": "INT"          
+        },
+        {
+            "name": "erectwillump",
+            "tag": "boing"        
+        },
+        {
+            "name": "dronehype",
+            "tag": "EUW"            
+        },
+        {
+            "name": "AddeltalentesTV",
+            "tag": "EUW"           
+        },
+        {
+            "name": "Bal",
+            "tag": "Chant"           
+        },
+        {
+            "name": "Hawk2eyes",
+            "tag": "EUW"           
+        }
     ]
 }
-

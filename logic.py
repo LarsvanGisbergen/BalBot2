@@ -64,7 +64,19 @@ def is_game_win(puuid, game_id):
     print(f"Player with PUUID {puuid} not found in game ID {game_id}")
     return False
     
+def get_users_info():
+    with open('users.json', 'r') as f:
+        return json.load(f)
 
-# todo
-def on_game_result(puuid, win):
-    pass
+def add_score(discord_id, score):
+    with open('users.json', 'r') as f:
+        users_info = json.load(f)
+
+    for user in users_info['users']:
+        if user['discord_id'] == discord_id:
+            user['score'] += score
+            break
+
+    with open('users.json', 'w') as f:
+        json.dump(users_info, f, indent=4)
+    
