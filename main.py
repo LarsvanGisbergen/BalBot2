@@ -1,14 +1,11 @@
 from api import *
 from logic import *
 import time
+import json
 
 # Global list to track ongoing games
 ongoing_games = []
 
-
-# for all players in players.json add the last played game into checked_games.json
-# from this game on new games will be considered valid to use for betting
-log_last_game_bulk()
 
 players_info = get_players_info()
 if not players_info:
@@ -27,18 +24,7 @@ while True:
             print(f"Error fetching PUUID for {game_name}#{tag_line}: {puuid['error']}")
             continue
         
-        # Check if active game
-        active_game = get_active_game(puuid)
-        if active_game == None:
-            print(f"{game_name}#{tag_line} is not active!")
-            continue
-        
-        # Check if active game is a new game
-        game_id = "EUW1_" + str(active_game.get("gameId"))
-        if game_id and (puuid,game_id) not in ongoing_games:
-            print(f"{game_name}#{tag_line} is in a new live game! (Game ID: {game_id})")
-            ongoing_games.append((puuid, game_id))
-            
+
         for puuid, game_id in ongoing_games[:]:
             active_game = get_active_game(puuid)
             if active_game is None:
@@ -50,11 +36,21 @@ while True:
                     win = is_game_win(puuid, game_id)
                 ongoing_games.remove((puuid, game_id))
                 if win:
-                    print(f"{game_name}#{tag_line} has just finished a game and won!")
+                    print(f"{game_name}#{tag_line} has just finished a game and won!")                 
                 else:
                     print(f"{game_name}#{tag_line} has just finished a game and lost!")
-                    
-                #on_game_result(puuid, win)
-        print(f"{game_name}#{tag_line} is in a live game!")
-                 
-    time.sleep(60)  
+            else:
+                print(f"{game_name}#{tag_line} is currently in a game!")
+        
+        
+        active_game = get_active_game(puuid)
+        if not active_game:
+            print(f"{game_name}#{tag_line} is not active!")
+            continue
+        
+        # Check if active game is a new game
+        game_id = "EUW1_" + str(active_game.get("gameId"))
+        if game_id and (puuid,game_id) not in ongoing_games:
+            print(f"{game_name}#{tag_line} is in a new live game! (Game ID: {game_id})")
+            ongoing_games.append((puuid, game_id))         
+    time.sleep(30)  
