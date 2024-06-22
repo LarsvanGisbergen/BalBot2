@@ -1,28 +1,32 @@
 {
     "players": [
         {
-            "name": "Streaming Badboy",
-            "tag": "INT"          
+            "name": "KC 113",
+            "tag": "113"
         },
         {
-            "name": "erectwillump",
-            "tag": "boing"        
+            "name": "Doctor House 13",
+            "tag": "EUW"
         },
         {
-            "name": "dronehype",
-            "tag": "EUW"            
+            "name": "Diamondprox",
+            "tag": "ProX"
         },
         {
-            "name": "AddeltalentesTV",
-            "tag": "EUW"           
+            "name": "Shikari",
+            "tag": "EUW"
         },
         {
-            "name": "Bal",
-            "tag": "Chant"           
+            "name": "SeRiN1",
+            "tag": "EUW"
         },
         {
-            "name": "Hawk2eyes",
-            "tag": "EUW"           
+            "name": "xαky",
+            "tag": "EUW"
+        },
+        {
+            "name": "unforgiven",
+            "tag": "12321"
         }
     ]
 }

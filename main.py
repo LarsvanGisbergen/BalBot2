@@ -25,25 +25,22 @@ async def run_main(refresh_rate):
                 continue
 
             active_game = get_active_game(puuid)
-            if active_game:
-                game_id = "EUW1_" + str(active_game.get("gameId"))
+            if active_game:  
+                game_id = "EUW1_" + str(active_game.get("gameId"))             
                 if (puuid, game_id) not in ongoing_games:
-                    print(f"{game_name}#{tag_line} is in a new live game! (Game ID: {game_id})")
+                    print(f"{game_name}#{tag_line} is in a new live game! (Game ID: {game_id})")                   
                     ongoing_games.append((puuid, game_id))
                     await send_vote_message(game_id, f"{game_name}#{tag_line}")
                 else:
                     print(f"{game_name}#{tag_line} is currently in a game! (Game ID: {game_id})")
             else:
                 print(f"{game_name}#{tag_line} is not active!")
-                for puuid, game_id in ongoing_games[:]:
-                    active_game_check = get_active_game(puuid)
-                    if active_game_check is None:
-                        player_info = next((p for p in players_info if get_account_puuid(p["name"], p["tag"]) == puuid), None)
-                        if player_info:
-                            game_name = player_info["name"]
-                            tag_line = player_info["tag"]
-                            win = is_game_win(puuid, game_id)
-                          
+                for puuid_ongoing, game_id in ongoing_games[:]:
+                    if puuid != puuid_ongoing:
+                        continue
+                    active_game_check = get_active_game(puuid_ongoing)
+                    if active_game_check is None:                   
+                        win = is_game_win(puuid, game_id)                         
                         if win:
                             print(f"{game_name}#{tag_line} has just finished a game and won!")
                         else:
