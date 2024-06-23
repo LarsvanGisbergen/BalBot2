@@ -5,7 +5,7 @@ from logic import add_score, get_users_info, get_players_info
 from discord.ext import commands
 
 DISCORD_TOKEN = os.environ.get('DISCORD_TOKEN')
-CHANNEL_ID = 1251180886284701767
+CHANNEL_ID = 1254471403038838866
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)

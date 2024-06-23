@@ -60,7 +60,7 @@ async def main_loop(refresh_rate):
         await asyncio.sleep(refresh_rate)
 
 async def main():
-    refresh_rate = 30  # seconds
+    refresh_rate = 59  # seconds
 
     bot_task = asyncio.create_task(run_bot())
     await asyncio.sleep(10)  # Wait 10 seconds after starting run_bot

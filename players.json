@@ -1,20 +1,52 @@
 {
     "players": [
         {
-            "name": "AloisNL",
+            "name": "hawk2eyes",
             "tag": "EUW"
         },
         {
-            "name": "Lurox",
-            "tag": "Lurox"
+            "name": "Chiemayusi",
+            "tag": "Chant"
         },     
         {
-            "name": "Relinquished",
-            "tag": "ADC"
+            "name": "tomclo",
+            "tag": "EUW"
         },
         {
-            "name": "Xioh",
-            "tag": "1234"
+            "name": "Klokje",
+            "tag": "Chant"
+        },
+        {
+            "name": "Hanno00",
+            "tag": "CHANT"
+        },
+        {
+            "name": "TheRealLukeTS117",
+            "tag": "EUW"
+        },
+        {
+            "name": "Sergenda",
+            "tag": "FF15"
+        },
+        {
+            "name": "sanderverho",
+            "tag": "EUW"
+        },
+        {
+            "name": "MrThatAintFalco",
+            "tag": "EUW"
+        },
+        {
+            "name": "Bal",
+            "tag": "Chant"
+        },
+        {
+            "name": "Jeltano",
+            "tag": "Chant"
+        },
+        {
+            "name": "BeeGirl",
+            "tag": "Graft"
         }
     ]
 }
