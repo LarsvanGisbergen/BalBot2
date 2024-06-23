@@ -27,7 +27,7 @@ async def run_main(refresh_rate):
             active_game = get_active_game(puuid)
             if active_game:  
                 game_id = "EUW1_" + str(active_game.get("gameId"))             
-                if (puuid, game_id) not in ongoing_games:
+                if not any(game_id == tup[1] for tup in ongoing_games):
                     print(f"{game_name}#{tag_line} is in a new live game! (Game ID: {game_id})")                   
                     ongoing_games.append((puuid, game_id))
                     await send_vote_message(game_id, f"{game_name}#{tag_line}")

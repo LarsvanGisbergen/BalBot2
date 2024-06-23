@@ -49,6 +49,10 @@ async def on_reaction_add(reaction, user):
 
         # Check if the user already has votes recorded
         if user.id in user_votes:
+            for user_vote in user_votes[user.id]:
+                if user_vote["game_id"] == game_id:
+                    # user already voted
+                    return
             user_votes[user.id].append({
                 "game_id": game_id,
                 "vote": vote,
@@ -84,10 +88,10 @@ async def update_scores(game_id, win):
                     display_name = member.display_name
                     if (votes["vote"] == "win" and win) or (votes["vote"] == "lose" and not win):
                         add_score(user_id, 25)
-                        score_updates.append(f"{display_name} gained 25 points for predicting correctly on Game ID: {game_id}.")
+                        score_updates.append(f"{display_name}: +25")
                     else:
-                        add_score(user_id, -25)
-                        score_updates.append(f"{display_name} lost 25 points for predicting incorrectly on Game ID: {game_id}.")
+                        add_score(user_id, -5)
+                        score_updates.append(f"{display_name}: -5")
                 
                 # Remove this specific vote from the user's list of votes
                 votes_list.remove(votes)
