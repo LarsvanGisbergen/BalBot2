@@ -4,7 +4,7 @@ import time
 import json
 from bot import *
 import asyncio
-
+import datetime
 
 async def run_main(refresh_rate):
     players_info = get_players_info()
@@ -34,7 +34,7 @@ async def run_main(refresh_rate):
                 else:
                     print(f"{game_name}#{tag_line} is currently in a game! (Game ID: {game_id})")
             else:
-                print(f"{game_name}#{tag_line} is not active!")
+                #print(f"{game_name}#{tag_line} is not active!")
                 for puuid_ongoing, game_id in ongoing_games[:]:
                     if puuid != puuid_ongoing:
                         continue
@@ -46,10 +46,12 @@ async def run_main(refresh_rate):
                         else:
                             print(f"{game_name}#{tag_line} has just finished a game and lost!")
 
-                        await send_final_message(game_name, win, players_info, game_id)
+                        await send_final_message(game_name, win, game_id)
                         ongoing_games.remove((puuid, game_id))
 
         await asyncio.sleep(refresh_rate)
+        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"Bot running {current_time}")
 
 
 async def main_loop(refresh_rate):

@@ -1,32 +1,20 @@
 {
     "players": [
         {
-            "name": "KC 113",
-            "tag": "113"
-        },
-        {
-            "name": "Doctor House 13",
+            "name": "AloisNL",
             "tag": "EUW"
         },
         {
-            "name": "Diamondprox",
-            "tag": "ProX"
+            "name": "Lurox",
+            "tag": "Lurox"
+        },     
+        {
+            "name": "Relinquished",
+            "tag": "ADC"
         },
         {
-            "name": "Shikari",
-            "tag": "EUW"
-        },
-        {
-            "name": "SeRiN1",
-            "tag": "EUW"
-        },
-        {
-            "name": "xαky",
-            "tag": "EUW"
-        },
-        {
-            "name": "unforgiven",
-            "tag": "12321"
+            "name": "Xioh",
+            "tag": "1234"
         }
     ]
 }

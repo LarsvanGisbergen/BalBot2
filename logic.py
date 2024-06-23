@@ -73,7 +73,7 @@ def add_score(discord_id, score):
         users_info = json.load(f)
 
     for user in users_info['users']:
-        if user['discord_id'] == discord_id:
+        if user['discord_id'] == str(discord_id):
             user['score'] += score
             break
 
