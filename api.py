@@ -71,15 +71,15 @@ def get_active_game(encrypted_puuid):
         print(f"Error fetching active game information: {response.status_code} - {response.text}")
         return None
 
-def get_champion_list():
+def get_champion_list_with_icons():
     """
-    Fetches the list of champions with their IDs and names from Data Dragon.
+    Fetches the list of champions with their IDs, names, and icons from Data Dragon.
 
     Returns:
-    dict: Dictionary mapping champion IDs to their names.
+    dict: Dictionary mapping champion IDs to their names and icons.
     """
     # Define the Data Dragon version (can be dynamically fetched from Riot if needed)
-    version = '13.11.1'
+    version = '6.24.1'
     # Define the endpoint URL for the champion list from Data Dragon
     url = f"http://ddragon.leagueoflegends.com/cdn/{version}/data/en_US/champion.json"
     
@@ -89,8 +89,17 @@ def get_champion_list():
         
         champions_data = response.json()['data']
         
-        # Create a dictionary with champion ID and name
-        champion_list = {int(champion_info['key']): champion_info['name'] for champion_info in champions_data.values()}
+        # Create a dictionary with champion ID, name, and icon URL
+        champion_list = {}
+        for champion_key, champion_info in champions_data.items():
+            champion_id = int(champion_info['key'])
+            champion_name = champion_info['name']
+            # Construct the icon URL using champion ID
+            icon_url = f"https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{champion_id}.png"
+            champion_list[champion_id] = {
+                'name': champion_name,
+                'icon_url': icon_url
+            }
         
         return champion_list
     

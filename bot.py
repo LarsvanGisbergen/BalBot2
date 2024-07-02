@@ -23,19 +23,37 @@ async def on_ready():
     else:
         print("Channel not found.")
 
-async def send_vote_message(game_id, player_name, champion_name):
-    channel = client.get_channel(CHANNEL_ID)
-    if not champion_name:
+async def send_vote_message(game_id, player_name, champion):
+    channel = client.get_channel(CHANNEL_ID)  
+
+    # Prepare champion details
+    if not champion:
         champion_name = "?"
-    champion_name = champion_name.upper()
+        champion_img = None
+    else:
+        champion_name = champion.get("name")
+        champion_img = champion.get("icon_url")
+
     if channel:
-        message_content = (
-                    f"**🎮 Vote on the outcome of {player_name}'s Game! 🎮**\n\n"
-                    f"**Game ID:** `{game_id}`\n"
-                    f"**Champion:** `{champion_name}`\n\n"
-                    f"React with 💙 if you think **{player_name}** will win, and ❤️ if you think **{player_name}** will lose!"
-                )
-        vote_message = await channel.send(message_content)
+        # Create the embed
+        embed = discord.Embed(
+            title=f"Vote on the outcome of {player_name}'s Game!",
+            description=(            
+                f"**Champion:** `{champion_name}`\n\n"
+                f"React with 💙 if you think **{player_name}** will win, and ❤️ if you think **{player_name}** will lose!"
+            ),
+            color=discord.Color.blue()
+        )
+
+        if champion_img:
+            embed.set_thumbnail(url=champion_img)
+        
+        embed.set_footer(text=player_name, icon_url=champion_img if champion_img else discord.Embed.Empty)
+
+        # Send the embed message
+        vote_message = await channel.send(embed=embed)
+
+        # Store the vote message ID and add reactions
         active_votes[vote_message.id] = game_id
         await vote_message.add_reaction('💙')
         await vote_message.add_reaction('❤️')

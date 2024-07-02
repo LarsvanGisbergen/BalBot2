@@ -8,7 +8,7 @@ import datetime
 
 async def run_main(refresh_rate):
     players_info = get_players_info()
-    champion_list = get_champion_list()
+    champion_list = get_champion_list_with_icons()
     
     if not players_info:
         print("No players found in players.json, quitting...")
