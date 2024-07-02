@@ -23,10 +23,18 @@ async def on_ready():
     else:
         print("Channel not found.")
 
-async def send_vote_message(game_id, game_name):
+async def send_vote_message(game_id, player_name, champion_name):
     channel = client.get_channel(CHANNEL_ID)
+    if not champion_name:
+        champion_name = "?"
+    champion_name = champion_name.upper()
     if channel:
-        message_content = f"Vote on the outcome of Game ID: {game_id}\n\nReact with 💙 if you think {game_name} will win, and ❤️ if you think {game_name} will lose!"
+        message_content = (
+                    f"**🎮 Vote on the outcome of {player_name}'s Game! 🎮**\n\n"
+                    f"**Game ID:** `{game_id}`\n"
+                    f"**Champion:** `{champion_name}`\n\n"
+                    f"React with 💙 if you think **{player_name}** will win, and ❤️ if you think **{player_name}** will lose!"
+                )
         vote_message = await channel.send(message_content)
         active_votes[vote_message.id] = game_id
         await vote_message.add_reaction('💙')

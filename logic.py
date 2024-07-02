@@ -63,7 +63,32 @@ def is_game_win(puuid, game_id):
 
     print(f"Player with PUUID {puuid} not found in game ID {game_id}")
     return False
-    
+
+async def get_champion_name(active_game, puuid, champion_list):
+    """
+    Fetches the champion name of a player using their puuid from the active game data.
+
+    Args:
+    active_game (dict): The dictionary containing the active game data.
+    puuid (str): The puuid of the player.
+    champion_list (dict): Dictionary mapping champion IDs to their names.
+
+    Returns:
+    str: The name of the champion the player is currently playing.
+    """
+    participants = active_game.get('participants', [])
+
+    # Find the participant with the given puuid
+    for participant in participants:
+        if participant.get('puuid') == puuid:
+            champion_id = participant.get('championId')
+            
+            # Fetch champion name using champion ID from champion_list
+            champion_name = champion_list.get(champion_id)
+            return champion_name
+
+    return None
+  
 def get_users_info():
     with open('users.json', 'r') as f:
         return json.load(f)

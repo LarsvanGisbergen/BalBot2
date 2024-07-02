@@ -8,6 +8,8 @@ import datetime
 
 async def run_main(refresh_rate):
     players_info = get_players_info()
+    champion_list = get_champion_list()
+    
     if not players_info:
         print("No players found in players.json, quitting...")
         return
@@ -28,11 +30,13 @@ async def run_main(refresh_rate):
             if active_game:  
                 game_id = "EUW1_" + str(active_game.get("gameId"))             
                 if not any(game_id == tup[1] for tup in ongoing_games):
-                    print(f"{game_name}#{tag_line} is in a new live game! (Game ID: {game_id})")                   
+                    print(f"{game_name}#{tag_line} is in a new live game! (Game ID: {game_id})")                                      
                     ongoing_games.append((puuid, game_id))
-                    await send_vote_message(game_id, f"{game_name}#{tag_line}")
+                    champion_name = await get_champion_name(active_game, puuid, champion_list)                   
+                    await send_vote_message(game_id, f"{game_name}#{tag_line}", champion_name)         
                 else:
-                    print(f"{game_name}#{tag_line} is currently in a game! (Game ID: {game_id})")
+                    #print(f"{game_name}#{tag_line} is currently in a game! (Game ID: {game_id})")
+                    pass
             else:
                 #print(f"{game_name}#{tag_line} is not active!")
                 for puuid_ongoing, game_id in ongoing_games[:]:
@@ -48,11 +52,11 @@ async def run_main(refresh_rate):
 
                         await send_final_message(game_name, win, game_id)
                         ongoing_games.remove((puuid, game_id))
-
-        await asyncio.sleep(refresh_rate)
+ 
         current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(f"Bot running {current_time}")
-
+        print(f"Ongoing game count: {len(ongoing_games)}")
+        await asyncio.sleep(refresh_rate)
 
 async def main_loop(refresh_rate):
     while True:
@@ -60,7 +64,7 @@ async def main_loop(refresh_rate):
         await asyncio.sleep(refresh_rate)
 
 async def main():
-    refresh_rate = 59  # seconds
+    refresh_rate = 30  # seconds
 
     bot_task = asyncio.create_task(run_bot())
     await asyncio.sleep(10)  # Wait 10 seconds after starting run_bot

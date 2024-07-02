@@ -70,3 +70,31 @@ def get_active_game(encrypted_puuid):
     else:
         print(f"Error fetching active game information: {response.status_code} - {response.text}")
         return None
+
+def get_champion_list():
+    """
+    Fetches the list of champions with their IDs and names from Data Dragon.
+
+    Returns:
+    dict: Dictionary mapping champion IDs to their names.
+    """
+    # Define the Data Dragon version (can be dynamically fetched from Riot if needed)
+    version = '13.11.1'
+    # Define the endpoint URL for the champion list from Data Dragon
+    url = f"http://ddragon.leagueoflegends.com/cdn/{version}/data/en_US/champion.json"
+    
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an exception for bad response status
+        
+        champions_data = response.json()['data']
+        
+        # Create a dictionary with champion ID and name
+        champion_list = {int(champion_info['key']): champion_info['name'] for champion_info in champions_data.values()}
+        
+        return champion_list
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching champion data: {e}")
+    
+    return None
