@@ -3,9 +3,12 @@ import discord
 import json
 from logic import add_score, get_users_info, get_players_info
 from discord.ext import commands
+from datetime import datetime, timedelta
+
 
 DISCORD_TOKEN = os.environ.get('DISCORD_TOKEN')
-CHANNEL_ID = 1254471403038838866
+#CHANNEL_ID = 1254471403038838866 # league-bets channel
+CHANNEL_ID = 1258056409413582950 # test channel
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
@@ -18,12 +21,11 @@ async def on_ready():
     print("Bot is ready.")
     channel = client.get_channel(CHANNEL_ID)
     if channel:
-        print(f"Channel found: {channel.name}")
-        await channel.send(f"We have logged in as {client.user}")
+        print(f"Channel found: {channel.name}")      
     else:
         print("Channel not found.")
 
-async def send_vote_message(game_id, player_name, champion):
+async def send_vote_message(game_id, player_name, champion, game_mode):
     channel = client.get_channel(CHANNEL_ID)  
 
     # Prepare champion details
@@ -34,27 +36,35 @@ async def send_vote_message(game_id, player_name, champion):
         champion_name = champion.get("name")
         champion_img = champion.get("icon_url")
 
+    # Prepare game_mode details
+    if not game_mode:
+        game_mode = "?"
+    elif game_mode == "CHERRY":
+        game_mode = "ARENA"
+    
     if channel:
         # Create the embed
         embed = discord.Embed(
-            title=f"Vote on the outcome of {player_name}'s Game!",
-            description=(            
-                f"**Champion:** `{champion_name}`\n\n"
-                f"React with 💙 if you think **{player_name}** will win, and ❤️ if you think **{player_name}** will lose!"
+        title=f"Vote on the outcome of {player_name}'s Game!",
+         description=(            
+                f"**Champion:** `{champion_name}`\n"
+                f"**Game Mode:** `{game_mode}`\n\n"
+                f"React with 💙 for a win, and ❤️ for a loss!\n\n"
+                f"You have 10 minutes to vote, late votes are ignored"
             ),
-            color=discord.Color.blue()
-        )
+        color=discord.Color.blue()
+)
 
         if champion_img:
             embed.set_thumbnail(url=champion_img)
         
-        embed.set_footer(text=player_name, icon_url=champion_img if champion_img else discord.Embed.Empty)
+        embed.set_footer(text=player_name, icon_url=champion_img)
 
         # Send the embed message
         vote_message = await channel.send(embed=embed)
 
         # Store the vote message ID and add reactions
-        active_votes[vote_message.id] = game_id
+        active_votes[vote_message.id] = (game_id, datetime.utcnow())
         await vote_message.add_reaction('💙')
         await vote_message.add_reaction('❤️')
         print(f"Vote message sent for Game ID: {game_id}")
@@ -65,7 +75,14 @@ async def on_reaction_add(reaction, user):
         return  # Ignore reactions from the bot itself
 
     if reaction.message.id in active_votes:
-        game_id = active_votes[reaction.message.id]
+        game_id, timestamp = active_votes[reaction.message.id]
+        current_time = datetime.utcnow()
+
+        # Check if the vote is within the 10-minute window
+        if current_time > timestamp + timedelta(minutes=10):
+            print(f"Vote from {user.id} ignored: voting time expired.")
+            return
+
         if str(reaction.emoji) == '💙':
             vote = "win"
         elif str(reaction.emoji) == '❤️':
@@ -77,7 +94,7 @@ async def on_reaction_add(reaction, user):
         if user.id in user_votes:
             for user_vote in user_votes[user.id]:
                 if user_vote["game_id"] == game_id:
-                    # user already voted
+                    print(f"Vote from {user.id} ignored: user already voted")
                     return
             user_votes[user.id].append({
                 "game_id": game_id,
@@ -153,7 +170,7 @@ async def send_final_message(game_name, win, game_id):
         await channel.send(result_message + score_updates_message + scores_message)
 
         # Clean up active_votes for this game
-        active_vote_message_ids = [key for key, value in active_votes.items() if value == game_id]
+        active_vote_message_ids = [key for key, value in active_votes.items() if value[0] == game_id]
         for message_id in active_vote_message_ids:
             del active_votes[message_id]
 

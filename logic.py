@@ -88,6 +88,20 @@ async def get_champion_name(active_game, puuid, champion_list):
             return champion_name
 
     return None
+
+async def get_game_mode(active_game):
+    """
+    Fetches the game mode of an active game.
+
+    Args:
+    active_game (dict): The dictionary containing the active game data.
+
+    Returns:
+    str: The name of the game mode.
+    """
+    game_mode = active_game.get('gameMode')
+    return game_mode if game_mode else None
+
   
 def get_users_info():
     with open('users.json', 'r') as f:

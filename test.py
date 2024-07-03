@@ -4,11 +4,12 @@ import asyncio
 
 
 
-name = "bcnbv"
-tag = "Aegis"
+name = "wewo"
+tag = "jung"
 
-champion_list = l.get_champion_list_with_icons()
-print(champion_list)
+puuid = l.get_account_puuid(name, tag)
+
+print(puuid)
 
 
 
