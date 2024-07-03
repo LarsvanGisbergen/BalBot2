@@ -7,8 +7,8 @@ from datetime import datetime, timedelta
 
 
 DISCORD_TOKEN = os.environ.get('DISCORD_TOKEN')
-#CHANNEL_ID = 1254471403038838866 # league-bets channel
-CHANNEL_ID = 1258056409413582950 # test channel
+CHANNEL_ID = 1254471403038838866 # league-bets channel
+#CHANNEL_ID = 1258056409413582950 # test channel
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
