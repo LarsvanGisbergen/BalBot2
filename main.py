@@ -53,8 +53,7 @@ async def run_main(refresh_rate):
                             print(f"{game_name}#{tag_line} has just finished a game and lost!")
                         else:
                             print(f"{game_name}#{tag_line} had a corrupted game, no points awarded, game removed")
-                            ongoing_games.remove((puuid, game_id))
-                            break
+                            
                         
                         await send_final_message(game_name, win, game_id)
                         ongoing_games.remove((puuid, game_id))
