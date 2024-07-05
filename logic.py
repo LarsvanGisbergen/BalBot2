@@ -49,12 +49,12 @@ def is_game_win(puuid, game_id):
     - game_id (str): The ID of the game.
 
     Returns:
-    - bool: True if the game was a win, False otherwise.
+    - bool: True if the game was a win, False otherwise, None if error
     """
     match_details = get_match_details(game_id)
     if not match_details:
         print(f"Could not fetch match details for game ID {game_id}")
-        return False
+        return None
 
     # Iterate through participant list to find the player's results
     for participant in match_details.get("info", {}).get("participants", []):
@@ -62,7 +62,7 @@ def is_game_win(puuid, game_id):
             return participant["win"]
 
     print(f"Player with PUUID {puuid} not found in game ID {game_id}")
-    return False
+    return None
 
 async def get_champion_name(active_game, puuid, champion_list):
     """

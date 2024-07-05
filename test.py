@@ -4,12 +4,13 @@ import asyncio
 
 
 
-name = "wewo"
-tag = "jung"
+name = "B0LULU"
+tag = "EUW"
 
 puuid = l.get_account_puuid(name, tag)
-
 print(puuid)
+game = l.get_active_game(puuid)
 
+print(len(game))
 
 

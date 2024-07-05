@@ -18,6 +18,7 @@ async def run_main(refresh_rate):
 
     while True:
         for player_info in players_info:
+            await asyncio.sleep(0.5)
             game_name = player_info["name"]
             tag_line = player_info["tag"]
             
@@ -48,9 +49,13 @@ async def run_main(refresh_rate):
                         win = is_game_win(puuid, game_id)                         
                         if win:
                             print(f"{game_name}#{tag_line} has just finished a game and won!")
-                        else:
+                        elif win is False:
                             print(f"{game_name}#{tag_line} has just finished a game and lost!")
-
+                        else:
+                            print(f"{game_name}#{tag_line} had a corrupted game, no points awarded, game removed")
+                            ongoing_games.remove((puuid, game_id))
+                            break
+                        
                         await send_final_message(game_name, win, game_id)
                         ongoing_games.remove((puuid, game_id))
                         break
@@ -66,7 +71,7 @@ async def main_loop(refresh_rate):
         await asyncio.sleep(refresh_rate)
 
 async def main():
-    refresh_rate = 30  # seconds
+    refresh_rate = 60  # seconds
 
     bot_task = asyncio.create_task(run_bot())
     await asyncio.sleep(10)  # Wait 10 seconds after starting run_bot
