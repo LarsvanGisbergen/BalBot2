@@ -147,19 +147,8 @@ async def send_final_message(game_name, win, game_id):
     channel = client.get_channel(CHANNEL_ID)
     if channel:
         if win is None:
-            error_message = f"Something went wrong with the game {game_name} for game ID {game_id}. No points are rewarded."
-            print(error_message)
+            error_message = f"Something went wrong with the game {game_name} for game ID {game_id}. No points are rewarded."          
             await channel.send(error_message)
-            
-            # Clean up active_votes and user_votes for this game
-            active_vote_message_ids = [key for key, value in active_votes.items() if value[0] == game_id]
-            for message_id in active_vote_message_ids:
-                del active_votes[message_id]
-
-            user_votes_to_remove = [key for key, value in user_votes.items() if value[0] == game_id]
-            for user_id in user_votes_to_remove:
-                del user_votes[user_id]
-
             return  # Exit the function as we don't want to proceed further
             
         result = "won" if win else "lost"
