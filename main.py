@@ -53,6 +53,7 @@ async def run_main(refresh_rate):
 
                         await send_final_message(game_name, win, game_id)
                         ongoing_games.remove((puuid, game_id))
+                        break
  
         current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(f"Bot running {current_time}")

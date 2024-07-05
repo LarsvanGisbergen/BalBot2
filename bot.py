@@ -41,7 +41,7 @@ async def send_vote_message(game_id, player_name, champion, game_mode):
         game_mode = "?"
     elif game_mode == "CHERRY":
         game_mode = "ARENA"
-    
+               
     if channel:
         # Create the embed
         embed = discord.Embed(
