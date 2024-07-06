@@ -7,7 +7,9 @@ from datetime import datetime, timedelta
 
 
 DISCORD_TOKEN = os.environ.get('DISCORD_TOKEN')
+
 CHANNEL_ID = 1254471403038838866 # league-bets channel
+HIGHSCORES_CHANNEL_ID = 1259122109251326055 # highscores channel
 #CHANNEL_ID = 1258056409413582950 # test channel
 
 intents = discord.Intents.default()
@@ -20,10 +22,14 @@ user_votes = {}
 async def on_ready():
     print("Bot is ready.")
     channel = client.get_channel(CHANNEL_ID)
+    highscore_channel = client.get_channel(HIGHSCORES_CHANNEL_ID)
     if channel:
-        print(f"Channel found: {channel.name}")      
+        print(f"Channel found: {channel.name}")   
+        if highscore_channel:
+            print(f"Channel found: {highscore_channel.name}")   
     else:
-        print("Channel not found.")
+        print("Betting channel not found... quitting")
+        exit()
 
 async def send_vote_message(game_id, player_name, champion, game_mode):
     channel = client.get_channel(CHANNEL_ID)  
@@ -142,12 +148,11 @@ async def update_scores(game_id, win):
     return score_updates
 
 
-
 async def send_final_message(game_name, win, game_id):
     channel = client.get_channel(CHANNEL_ID)
     if channel:
         if win is None:
-            error_message = f"Something went wrong with the game {game_name} for game ID {game_id}. No points are rewarded."          
+            error_message = f"Riot decided that {game_name}'s game no longer exists, this is what happens when you hire troglodyte developers, unlucky. No points will be rewarded for game ID: {game_id}"          
             await channel.send(error_message)
             return  # Exit the function as we don't want to proceed further
             
@@ -157,27 +162,44 @@ async def send_final_message(game_name, win, game_id):
         score_updates = await update_scores(game_id, win)
         score_updates_message = "\n".join(score_updates) + "\n\n"
 
-        users_info = get_users_info()
-        sorted_users = sorted(users_info['users'], key=lambda x: x['score'], reverse=True)
+        await channel.send(result_message + score_updates_message)
 
-         # Create a formatted scoreboard message
-        scores_message = "```\nScoreboard:\n"
-        scores_message += f"{'Rank':<6} {'Username':<20} {'Score':<5}\n"
-        scores_message += "-" * 34 + "\n"  # Add a separator line
-
-        for rank, user in enumerate(sorted_users, start=1):
-            member = await client.fetch_user(user['discord_id'])
-            username = member.display_name
-            scores_message += f"{rank:<6} {username:<20} {user['score']:<5}\n"
-
-        scores_message += "```"  # Close the code block
-
-        await channel.send(result_message + score_updates_message + scores_message)
+        # Update the highscores in the dedicated channel
+        await update_highscores()
 
         # Clean up active_votes for this game
         active_vote_message_ids = [key for key, value in active_votes.items() if value[0] == game_id]
         for message_id in active_vote_message_ids:
             del active_votes[message_id]
+
+            
+async def update_highscores():
+    highscore_channel = client.get_channel(HIGHSCORES_CHANNEL_ID)
+    
+    if highscore_channel:
+        users_info = get_users_info()
+        sorted_users = sorted(users_info['users'], key=lambda x: x['score'], reverse=True)
+        
+        # Create a formatted scoreboard message
+        scores_message = "```\nHighscores:\n"
+        scores_message += f"{'Rank':<6} {'Username':<20} {'Score':<5}\n"
+        scores_message += "-" * 34 + "\n"  # Add a separator line
+        
+        for rank, user in enumerate(sorted_users, start=1):
+            member = await client.fetch_user(user['discord_id'])
+            username = member.display_name
+            scores_message += f"{rank:<6} {username:<20} {user['score']:<5}\n"
+        
+        scores_message += "```"  # Close the code block
+        
+        # Fetch the last message in the highscores channel and edit it
+        messages = []
+        async for message in highscore_channel.history(limit=1):
+            messages.append(message)
+        if messages:
+            await messages[0].edit(content=scores_message)
+        else:
+            await highscore_channel.send(scores_message)
 
 async def run_bot():
     if DISCORD_TOKEN:
