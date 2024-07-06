@@ -52,7 +52,7 @@ async def run_main(refresh_rate):
                         elif win is False:
                             print(f"{game_name}#{tag_line} has just finished a game and lost!")
                         else:
-                            print(f"{game_name}#{tag_line} had a corrupted game, no points awarded, game removed")
+                            print(f"{game_name}#{tag_line} had a corrupted game, no points awarded")
                             
                         
                         await send_final_message(game_name, win, game_id)

@@ -152,7 +152,7 @@ async def send_final_message(game_name, win, game_id):
     channel = client.get_channel(CHANNEL_ID)
     if channel:
         if win is None:
-            error_message = f"Riot decided that {game_name}'s game no longer exists, this is what happens when you hire troglodyte developers, unlucky. No points will be rewarded for game ID: {game_id}"          
+            error_message = f"Riot decided that {game_name}'s game no longer exists, this is what happens when you hire troglodyte developers, unlucky. No points will be rewarded for game ID: {game_id}"                  
             await channel.send(error_message)
             return  # Exit the function as we don't want to proceed further
             
